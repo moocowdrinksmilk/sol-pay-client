@@ -1,8 +1,11 @@
+import { web3 } from "@project-serum/anchor"
 import { createContext, useContext } from "react"
 
 export interface PaymentContextState {
     sendProductTransaction(): Promise<void>;
-    initAuthorities(): Promise<void>
+    initAuthorities(): Promise<void>;
+    addProduct(amount: number): Promise<web3.PublicKey>;
+    getProductDetails(publicKey: web3.PublicKey): Promise<any>
 }
 
 const DEFAULT_CONTEXT = {
@@ -10,6 +13,12 @@ const DEFAULT_CONTEXT = {
         return Promise.reject(console.error("error"))
     },
     initAuthorities() {
+        return Promise.reject(console.error("error"))
+    },
+    addProduct() {
+        return Promise.reject(console.error("error"))
+    },
+    getProductDetails() {
         return Promise.reject(console.error("error"))
     }
 }

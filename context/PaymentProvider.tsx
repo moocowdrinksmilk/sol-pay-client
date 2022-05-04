@@ -3,7 +3,7 @@ import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets';
 import { clusterApiUrl, Connection, LAMPORTS_PER_SOL, sendAndConfirmTransaction, Transaction } from '@solana/web3.js';
 import React, { useMemo, useState } from 'react';
 import { PaymentContext } from './usePayment'
-import { BN, Provider, web3 } from '@project-serum/anchor';
+import { BN, Program, Provider, web3 } from '@project-serum/anchor';
 import { getProgram } from './utils/program';
 import { getProvider } from './utils/provider';
 import { notification } from 'antd';
@@ -23,16 +23,6 @@ const PaymentProvider = (props: props) => {
     const sendProductTransaction = async () => {
 
     }
-
-    // const initProduct = async () => {
-    //     if (!wallet) {
-    //         return 
-    //     }
-    //     const provider = await getProvider(wallet)
-    //     const program = await getProgram(provider as Provider)
-    //     const newProductAccount = web3.Keypair.generate()
-    //     const tx = program.transaction.initProduct()
-    // }
 
     const initAuthorities = async () => {
         console.log("Hello");
@@ -63,6 +53,8 @@ const PaymentProvider = (props: props) => {
             const txId = await provider?.connection.sendRawTransaction(signedTx.serialize())
 
             await provider?.connection.confirmTransaction(txId as string)
+            console.log(newAuthoritiesAccount.publicKey.toBase58());
+            
             setAuthority(newAuthoritiesAccount.publicKey.toBase58())
         } catch (e) {
             notification.error({
@@ -76,21 +68,23 @@ const PaymentProvider = (props: props) => {
         if (!wallet) {
             return
         }
-
+        console.log(amount);
+        
         try {
             const provider = await getProvider(wallet) as Provider
             const program = await getProgram(provider)
             const newProduct = web3.Keypair.generate()
 
-            const tokenAccount = getTokenAccount(provider, NATIVE_MINT)
+            const tokenAccount = await getTokenAccount(NATIVE_MINT)
+            console.log(tokenAccount, "returned token account");
 
             const tx = program.transaction.initProduct(
-                new BN(amount * LAMPORTS_PER_SOL), {
+                new BN(amount), {
                     accounts: {
                         signer: wallet.publicKey,
                         product: newProduct.publicKey,
                         tokenAccount: tokenAccount,
-                        authorityGroup: new web3.PublicKey(authority),
+                        authorityGroup: new web3.PublicKey("623L46fZw5tdnzzx8pqoWTnNVwQem1Zm315aYpc4wFFg"),
                         systemProgram: web3.SystemProgram.programId
                     }
                 }
@@ -98,10 +92,14 @@ const PaymentProvider = (props: props) => {
             tx.feePayer = wallet.publicKey
             let blockhashObj = await provider?.connection.getLatestBlockhash()
             tx.recentBlockhash = blockhashObj?.blockhash
-            tx.sign(newAuthoritiesAccount)
+            tx.sign(newProduct)
             const signedTx = await wallet.signTransaction(tx)
             const txId = await provider?.connection.sendRawTransaction(signedTx.serialize())
+            await provider?.connection.confirmTransaction(txId as string)
+            return newProduct.publicKey
         } catch(e) {
+            console.log(e);
+            
             notification.error({
                 message: e.message,
                 placement: "bottomLeft"
@@ -109,35 +107,67 @@ const PaymentProvider = (props: props) => {
         }
     }
 
-    const getTokenAccount = async (provider: Provider, mint: web3.PublicKey) => {
+    const getProductDetails = async (publicKey: web3.PublicKey) => {
+        if (!wallet) {
+            return
+        }
+        const provider = await getProvider(wallet) as Provider
+        const program = await getProgram(provider)
+        const productAccount = await program.account.product.fetch(publicKey)
+        console.log(productAccount);
+        
+        return productAccount
+    }
 
+    const getTokenAccount = async (mint: web3.PublicKey) => {        
+        if (!wallet) {
+            return
+        }
+
+        const provider = await getProvider(wallet) as Provider
+        const program = await getProgram(provider)
         const tokenAccount = await getAssociatedTokenAddress(
             mint,
             wallet?.publicKey as web3.PublicKey
         )
-        const tokenAccountTransaction = new web3.Transaction().add(
-            createAssociatedTokenAccountInstruction(
-                wallet?.publicKey as web3.PublicKey,
-                tokenAccount,
-                wallet?.publicKey as web3.PublicKey,
-                mint
+        console.log(tokenAccount, "token account");
+        try {
+            const tokenAccountTransaction = new Transaction().add(
+                createAssociatedTokenAccountInstruction(
+                    wallet?.publicKey as web3.PublicKey,
+                    tokenAccount,
+                    wallet?.publicKey as web3.PublicKey,
+                    mint
+                )
             )
-        )
-        tokenAccountTransaction.feePayer = wallet?.publicKey
-        let blockhashObj = await provider?.connection.getLatestBlockhash()
-        tokenAccountTransaction.recentBlockhash = blockhashObj?.blockhash
-        const signedTx = await wallet?.signTransaction(tokenAccountTransaction) as Transaction
-        const txId = await provider.connection.sendRawTransaction(signedTx?.serialize())
-
-        await provider.connection.confirmTransaction(txId)
-        return tokenAccount
+            tokenAccountTransaction.feePayer = wallet?.publicKey
+            let blockhashObj = await provider?.connection.getLatestBlockhash()
+            tokenAccountTransaction.recentBlockhash = blockhashObj?.blockhash
+            const signedTx = await wallet?.signTransaction(tokenAccountTransaction)
+            console.log(signedTx);
+            
+            const txId = await provider.connection.sendRawTransaction(signedTx?.serialize())
+            console.log(txId);
+            
+            await provider.connection.confirmTransaction(txId)
+            return tokenAccount
+        } catch(e) {
+            console.log(e);
+            
+        } 
+        finally {
+            return tokenAccount
+        }
+        
     }
 
     return (
 
             <PaymentContext.Provider value={{
                 sendProductTransaction,
-                initAuthorities
+                initAuthorities,
+                addProduct,
+                getProductDetails
             }}>
                 {props.children}
             </PaymentContext.Provider>
