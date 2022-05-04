@@ -1,7 +1,7 @@
 import { ConnectionProvider, WalletProvider, useAnchorWallet } from '@solana/wallet-adapter-react';
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets';
 import { clusterApiUrl, Connection } from '@solana/web3.js';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { PaymentContext } from './usePayment'
 import { Provider, web3 } from '@project-serum/anchor';
 import { getProgram } from './utils/program';
@@ -14,26 +14,8 @@ interface props {
 
 const PaymentProvider = (props: props) => {
     const wallet = useAnchorWallet()
-    // const network = 'http://127.0.0.1:8899';
-    const connection = new Connection(clusterApiUrl('devnet'), {
-        commitment: 'confirmed'
-    })
-
-    const wallets = useMemo(
-        () => [
-            new PhantomWalletAdapter(),
-            // new SlopeWalletAdapter(),
-            // new SolflareWalletAdapter({ network }),
-            // new TorusWalletAdapter(),
-            // new LedgerWalletAdapter(),
-            // new SolletWalletAdapter({ network }),
-            // new SolletExtensionWalletAdapter({ network }),
-        ],
-        [connection]
-    )
-
     const sendProductTransaction = async () => {
-        
+
     }
 
     // const initProduct = async () => {
@@ -47,9 +29,15 @@ const PaymentProvider = (props: props) => {
     // }
 
     const initAuthorities = async () => {
+        console.log("Hello");
+        console.log(wallet);
+        
+
         if (!wallet) {
             return
         }
+        console.log("bye");
+
         try {
             const provider = await getProvider(wallet)
             const program = await getProgram(provider as Provider)
@@ -69,31 +57,24 @@ const PaymentProvider = (props: props) => {
             const txId = await provider?.connection.sendRawTransaction(signedTx.serialize())
 
             await provider?.connection.confirmTransaction(txId as string)
-        } catch(e) {
+        } catch (e) {
             notification.error({
                 message: e.message,
                 placement: "bottomLeft"
             })
         }
-        
+
 
     }
 
     return (
-        <ConnectionProvider endpoint={clusterApiUrl('devnet')}>
-            <WalletProvider wallets={wallets}>
-                <PaymentContext.Provider value={{
-                    sendProductTransaction,
-                    initAuthorities
-                }}>
-                    {props.children}
-                </PaymentContext.Provider>
-                {/* <WalletModalProvider>
-                    <WalletMultiButton />
-                    <WalletDisconnectButton />
-                </WalletModalProvider> */}
-            </WalletProvider>
-        </ConnectionProvider>
+
+            <PaymentContext.Provider value={{
+                sendProductTransaction,
+                initAuthorities
+            }}>
+                {props.children}
+            </PaymentContext.Provider>
     )
 }
 
