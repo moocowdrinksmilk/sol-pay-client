@@ -109,6 +109,8 @@ const PaymentProvider = (props: props) => {
 
     const getProductDetails = async (publicKey: web3.PublicKey) => {
         if (!wallet) {
+            console.log("no wallet");
+            
             return
         }
         const provider = await getProvider(wallet) as Provider

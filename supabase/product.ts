@@ -6,12 +6,18 @@ type Product = {
 }
 
 export const getProductSupa = async() => {
-    const res = await supabase
+    try {
+        const res = await supabase
         .from<Product>('product')
         .select('id')
         .match({
             authority: '623L46fZw5tdnzzx8pqoWTnNVwQem1Zm315aYpc4wFFg'
         })
-    console.log(res);
+        return res.data
+    } catch(e) {
+        console.log(e.message);
+        
+    }
+    
     
 }
