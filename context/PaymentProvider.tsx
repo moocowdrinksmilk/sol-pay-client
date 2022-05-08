@@ -79,7 +79,7 @@ const PaymentProvider = (props: props) => {
             console.log(tokenAccount, "returned token account");
 
             const tx = program.transaction.initProduct(
-                new BN(amount), {
+                new BN(amount * LAMPORTS_PER_SOL), {
                     accounts: {
                         signer: wallet.publicKey,
                         product: newProduct.publicKey,
