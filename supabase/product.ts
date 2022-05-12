@@ -18,6 +18,20 @@ export const getProductSupa = async() => {
         console.log(e.message);
         
     }
-    
-    
+}
+
+export const addProductSupa = async(id: string, authority: string) => {
+    try {
+        const res = await supabase
+        .from<Product>('product')
+        .insert([
+            {
+                id,
+                authority
+            }
+        ])
+    } catch(e) {
+        console.log(e.message);
+        
+    }
 }

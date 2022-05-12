@@ -7,7 +7,7 @@ import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { web3 } from '@project-serum/anchor';
 import axios from 'axios';
 import { Product } from '../types/product';
-import { getProductSupa } from '../supabase/product';
+import { addProductSupa, getProductSupa } from '../supabase/product';
 
 
 const Home: NextPage = () => {
@@ -17,6 +17,7 @@ const Home: NextPage = () => {
     console.log(wallet?.publicKey);
     const [product, setProduct] = useState<Product>()
     const [products, setProducts] = useState<Product[]>()
+    const [productsid, setProductsid] = useState<web3.PublicKey[]>()
 
     useEffect(() => {
         if (!wallet) {
@@ -25,7 +26,7 @@ const Home: NextPage = () => {
         const getProducts = async () => {
             const products = await getProductSupa()
             let fetchedProducts: Product[] = []
-
+            let ids: web3.PublicKey[] = []
             for (let i = 0; i< products?.length; i++) {
                 const key = new web3.PublicKey(products[i].id)
                 const indivProduct = await payment.getProductDetails(key)
@@ -33,24 +34,30 @@ const Home: NextPage = () => {
                     continue
                 }
                 fetchedProducts.push(indivProduct)
+                ids.push(key)
                 console.log(fetchedProducts);
                 
             }
             console.log(fetchedProducts);
-            
+            setProductsid(ids)
             setProducts(fetchedProducts)
         }
         getProducts()
-    }, [wallet])
+    }, [wallet, addProductSupa])
 
     const add = async () => {
         const account = await payment.addProduct(1)
         console.log(account.toBase58());
 
         const product = await payment.getProductDetails(account)
+        await addProductSupa(account.toBase58(), "623L46fZw5tdnzzx8pqoWTnNVwQem1Zm315aYpc4wFFg")
         console.log(product);
         setProduct(product)
 
+    }
+
+    const transact = async () => {
+        await payment.sendProductTransaction(wallet?.publicKey, products[0], productsid[0])
     }
 
 
@@ -68,6 +75,9 @@ const Home: NextPage = () => {
       </button>
             <button className="p-2 bg-blue-200 rouded-md" onClick={add}>
                 Login
+      </button>
+      <button className="p-2 bg-blue-200 rouded-md" onClick={transact}>
+          transact
       </button>
             <div className="flex flex-col">
                 <div>
