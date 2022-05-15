@@ -30,7 +30,7 @@ const WalletWrapper = (props: props) => {
 
     return (
         <ConnectionProvider endpoint={clusterApiUrl('devnet')}>
-            <WalletProvider wallets={wallets} autoConnect>
+            <WalletProvider wallets={wallets}>
 
                 {props.children}
             </WalletProvider>
