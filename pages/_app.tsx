@@ -7,16 +7,14 @@ import PaymentProvider from '../context/PaymentProvider'
 import React, { useEffect } from 'react';
 import WalletWrapper from '../context/utils/WalletWrapper';
 import { getSession } from '../supabase/discord';
+import { initSupabaseClient } from '../supabase/client';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient()
 
-  // useEffect(() => {    
-  //   getSession().then(res => {
-  //     console.log(res);
-      
-  //   })
-  // }, [])
+  useEffect(() => {
+    initSupabaseClient()
+  }, [])
 
   return (
     <WalletWrapper>

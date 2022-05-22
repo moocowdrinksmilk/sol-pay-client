@@ -5,11 +5,11 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
 
 let supabase: SupabaseClient
 
-export const initClient = async () => {
+export const initSupabaseClient = async () => {
     supabase = createClient(supabaseUrl, supabaseAnonKey)
 }
 
-export const getSupabaseClient = async () => {
+export const getSupabaseClient = () => {
     return supabase
 }
 

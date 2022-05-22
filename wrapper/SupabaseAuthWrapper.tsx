@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { supabase } from '../supabase/client'
+import { getSupabaseClient } from '../supabase/client'
 
 interface AuthProps {
     children: React.ReactNode

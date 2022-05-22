@@ -1,4 +1,4 @@
-import { supabase } from './client'
+import { getSupabaseClient } from './client'
 
 type Product = {
     id: string,
@@ -7,6 +7,7 @@ type Product = {
 
 export const getProductSupa = async() => {
     try {
+        const supabase = getSupabaseClient()
         const res = await supabase
         .from<Product>('product')
         .select('id')
@@ -22,6 +23,7 @@ export const getProductSupa = async() => {
 
 export const addProductSupa = async(id: string, authority: string) => {
     try {
+        const supabase = getSupabaseClient()
         const res = await supabase
         .from<Product>('product')
         .insert([
