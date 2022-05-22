@@ -4,11 +4,19 @@ import 'tailwindcss/tailwind.css';
 import type { AppProps } from 'next/app'
 import { QueryClient, QueryClientProvider } from 'react-query';
 import PaymentProvider from '../context/PaymentProvider'
-import React from 'react';
+import React, { useEffect } from 'react';
 import WalletWrapper from '../context/utils/WalletWrapper';
+import { getSession } from '../supabase/discord';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient()
+
+  // useEffect(() => {    
+  //   getSession().then(res => {
+  //     console.log(res);
+      
+  //   })
+  // }, [])
 
   return (
     <WalletWrapper>
