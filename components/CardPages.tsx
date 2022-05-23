@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { SiDiscord } from "react-icons/si"
+import { BsFillArrowRightSquareFill, BsFillArrowLeftSquareFill } from 'react-icons/bs'
 
 interface props {
 }
@@ -75,14 +76,14 @@ const CardPages = (props: props) => {
                         )
                     })
                 } */}
-            <div className={`flex-1 w-full flex flex-col items-center justify-center gap-4 transform animation-all ease-in-out duration-300  ${getPosition(0)}`}>
+            <div className={`w-full flex flex-col items-center justify-center gap-4 transform animation-all ease-in-out duration-300  ${getPosition(0)}`}>
                 <div className="flex flex-col items-center">
                     <h1 className="text-3xl font-bold mb-4">
-                        Create Account Page 1
+                        Create an account with Discord
                         </h1>
-                    <h2 className="text-lg text-gray-500">
+                    {/* <h2 className="text-lg text-gray-500">
                         Already have an account? <a href="">Sign in</a>
-                    </h2>
+                    </h2> */}
                 </div>
                 <button className="flex flex-row justify-center items-center gap-2 py-2 w-full bg-indigo-400 hover:bg-indigo-500 rounded-lg font-semibold text-lg text-white"
                     onClick={() => { nextPage() }}
@@ -107,6 +108,16 @@ const CardPages = (props: props) => {
                     <SiDiscord size={25} />
                     <div>Sign up with discord</div>
                 </button>
+            </div>
+
+            <div className="absolute bottom-0 left-0 mb-14 w-full px-8 flex flex-row justify-between">
+                <button onClick={() => { prevPage() }}>
+                    <BsFillArrowLeftSquareFill size={30} color="lightblue" />
+                </button>
+
+                {/* <button onClick={() => { prevPage() }}>
+                 <BsFillArrowRightSquareFill size={30} color="lightblue" />
+                </button> */}
             </div>
         </div>
     )
