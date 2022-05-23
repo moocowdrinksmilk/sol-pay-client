@@ -8,13 +8,13 @@ import React, { useEffect } from 'react';
 import WalletWrapper from '../context/utils/WalletWrapper';
 import { getSession } from '../supabase/discord';
 import { initSupabaseClient } from '../supabase/client';
-import SupabaseAuthWrapper from '../wrapper/SupabaseAuthWrapper'
+import SupabaseWrapper from '../wrapper/SupabaseAuthWrapper'
 
 function MyApp({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient()
 
   return (
-    <SupabaseAuthWrapper>
+    <SupabaseWrapper>
       <WalletWrapper>
         <PaymentProvider>
           <QueryClientProvider client={queryClient}>
@@ -22,7 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           </QueryClientProvider>
         </PaymentProvider>
       </WalletWrapper>
-    </SupabaseAuthWrapper>
+    </SupabaseWrapper>
   )
 }
 export default MyApp

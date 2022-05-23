@@ -5,7 +5,7 @@ interface AuthProps {
     children: React.ReactNode
 }
 
-const SupabaseAuthWrapper = (AuthProps: AuthProps) => {
+const SupabaseWrapper = (AuthProps: AuthProps) => {
     useEffect(() => {
         const addAuth = async () => {
             initSupabaseClient()
@@ -32,4 +32,4 @@ const SupabaseAuthWrapper = (AuthProps: AuthProps) => {
     )
 }
 
-export default SupabaseAuthWrapper
+export default SupabaseWrapper
