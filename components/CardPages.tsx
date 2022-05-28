@@ -114,10 +114,6 @@ const CardPages = (props: props) => {
                 <button onClick={() => { prevPage() }}>
                     <BsFillArrowLeftSquareFill size={30} color="lightblue" />
                 </button>
-
-                {/* <button onClick={() => { prevPage() }}>
-                 <BsFillArrowRightSquareFill size={30} color="lightblue" />
-                </button> */}
             </div>
         </div>
     )

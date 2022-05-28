@@ -4,6 +4,15 @@
 
 @import '~antd/dist/antd.css';
 
+.row {
+  @apply flex flex-row
+}
+
+.col {
+  @apply flex flex-col
+}
+
+
 html,
 body {
   padding: 0;
