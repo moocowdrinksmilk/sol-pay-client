@@ -1,8 +1,16 @@
 import { getSupabaseClient } from './client'
 
-type Product = {
-    id: string,
+export type Product = {
+    id: string
     authority: string
+    name: string
+    category: string
+    pricing_model: string
+    price: number
+    recurring: boolean
+    billing_cycle: number
+    shipping: number
+    description: string
 }
 
 export const getProductSupa = async() => {
@@ -21,7 +29,18 @@ export const getProductSupa = async() => {
     }
 }
 
-export const addProductSupa = async(id: string, authority: string) => {
+export const addProductSupa = async(
+    id: string,
+    authority: string,
+    name: string,
+    category: string,
+    pricing_model: string, 
+    price: number, 
+    recurring: boolean,
+    billing_cycle: number,
+    shipping: number,
+    description: string
+    ) => {
     try {
         const supabase = getSupabaseClient()
         const res = await supabase
@@ -29,7 +48,15 @@ export const addProductSupa = async(id: string, authority: string) => {
         .insert([
             {
                 id,
-                authority
+                authority,
+                name,
+                category,
+                pricing_model,
+                price,
+                recurring,
+                billing_cycle,
+                shipping,
+                description
             }
         ])
     } catch(e) {

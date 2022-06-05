@@ -1,4 +1,4 @@
-import { ConnectionProvider, WalletProvider, useAnchorWallet } from '@solana/wallet-adapter-react';
+import { ConnectionProvider, WalletProvider, useAnchorWallet, useWallet } from '@solana/wallet-adapter-react';
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets';
 import { clusterApiUrl, Connection, LAMPORTS_PER_SOL, sendAndConfirmTransaction, Transaction } from '@solana/web3.js';
 import React, { useMemo, useState } from 'react';
@@ -14,6 +14,8 @@ import {
 } from "@solana/spl-token";
 import { Product } from '../types/product';
 import { addTransactionSupa } from '../supabase/transaction';
+import { getAuthorityFromUserPubKey } from '../supabase/authority';
+import {Authority} from '../supabase/authority'
 
 interface props {
     children: React.ReactNode
@@ -21,6 +23,7 @@ interface props {
 
 const PaymentProvider = (props: props) => {
     const wallet = useAnchorWallet()
+    const solWallet = useWallet()
     const [authority, setAuthority] = useState("")
 
     const sendProductTransaction = async (key: web3.PublicKey, product: Product, productAccountKey: web3.PublicKey) => {
@@ -104,11 +107,10 @@ const PaymentProvider = (props: props) => {
         }
     }
 
-    const addProduct = async (amount: number) => {
+    const addProduct = async (amount: number, authority: Authority) => {        
         if (!wallet) {
             return
         }
-        console.log(amount);
 
         try {
             const provider = await getProvider(wallet) as Provider
@@ -124,7 +126,7 @@ const PaymentProvider = (props: props) => {
                     signer: wallet.publicKey,
                     product: newProduct.publicKey,
                     tokenAccount: tokenAccount,
-                    authorityGroup: new web3.PublicKey("623L46fZw5tdnzzx8pqoWTnNVwQem1Zm315aYpc4wFFg"),
+                    authorityGroup: new web3.PublicKey(authority.id),
                     systemProgram: web3.SystemProgram.programId
                 }
             }

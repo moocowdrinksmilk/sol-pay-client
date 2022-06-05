@@ -3,6 +3,12 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { Image } from 'antd';
 import { FaChevronLeft } from 'react-icons/fa'
 import Link from 'next/link'
+import { usePayment } from "../../context/usePayment";
+import React from "react";
+import { WalletModalProvider, WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { addProductSupa, Product } from '../../supabase/product'
+import { useAnchorWallet } from "@solana/wallet-adapter-react";
+import { getAuthorityFromUserPubKey } from "../../supabase/authority";
 
 export interface IFormInput {
     name: string
@@ -16,8 +22,43 @@ export interface IFormInput {
 
 const Add = () => {
     const { register, handleSubmit } = useForm<IFormInput>();
+    const payment = usePayment()
+    const wallet = useAnchorWallet()
 
-    const onSubmit: SubmitHandler<IFormInput> = data => console.log(data);
+    const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+        if (!wallet) {
+            return
+        }
+        const authority = await getAuthorityFromUserPubKey(wallet.publicKey.toBase58())
+        if (!authority) {
+            return
+        }
+
+        const pubkey = await payment.addProduct(data.price)
+        const product = {
+            name: data.name,
+            id: pubkey.toBase58(),
+            category: data.category,
+            description: data.description,
+            pricing_model: data.pricingModel,
+            price: data.price,
+            billing_cycle: 2,
+            shipping: data.shipping
+        }
+
+        await addProductSupa(
+            pubkey.toBase58(),
+            authority?.id,
+            data.name,
+            data.category,
+            data.pricingModel,
+            data.price,
+            false,
+            2,
+            data.shipping,
+            data.description
+        )
+    };
 
 
     return (
@@ -95,6 +136,9 @@ const Add = () => {
                             />
 
                             <input type="submit" className="w-2/6 bg-blue-500 text-white py-2 rounded-md" value="Save & Add Product" />
+                            <WalletModalProvider>
+                                <WalletMultiButton />
+                            </WalletModalProvider>
                         </div>
 
                         <div className="flex-1 col items-center gap-20">
