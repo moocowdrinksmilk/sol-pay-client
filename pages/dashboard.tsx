@@ -4,6 +4,11 @@ import { VscTriangleUp } from 'react-icons/vsc'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 import LineChartItem from "../components/homepage/charts/LineChart"
 import ChartContainer from '../components/homepage/charts/ChartContainer'
+import SmallChartContainer from "../components/homepage/charts/SmallChartContainer"
+import PieChartItem from "../components/homepage/charts/PieChartItem"
+import React from "react"
+import { BsBroadcast } from "react-icons/bs"
+import InvoiceItem from "../components/homepage/invoice/InvoiceItem"
 
 const Dashboard = () => {
     return (
@@ -77,8 +82,34 @@ const Dashboard = () => {
 
                         </div>
 
-                        <div className="">
+                        <div className="col w-3/12 px-2 pb-10 gap-2">
+                            <SmallChartContainer title="Earnings in June" value={40.8}>
+                                <PieChartItem />
+                            </SmallChartContainer>
 
+                            <div className="w-full h-1/3 bg-white rounded-md col p-4 gap-6">
+                                <div>
+                                    <h1>
+                                        Invoice Detail
+                                    </h1>
+                                    <div className="row gap-1 items-center">
+                                        <BsBroadcast color="blue" size={20} />
+                                        <div>
+                                            Live
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col w-ful gap-6 overflow-auto">
+                                    <InvoiceItem time={20} value={35} status={2} payer="Shopify" />
+                                    <InvoiceItem time={100} value={1000} status={3} payer="Amazon" />
+                                    <InvoiceItem time={20} value={70} status={1} payer="Personal Site A" />
+                                </div>
+                            </div>
+
+                            <div className="w-full h-1/3 bg-white rounded-md">
+
+                            </div>
                         </div>
                     </div>
                 </div>
