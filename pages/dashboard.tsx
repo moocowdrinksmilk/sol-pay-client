@@ -11,8 +11,10 @@ const Dashboard = () => {
             <SideBar />
 
             <div className="flex-1 col bg-gray-100">
-                <div className="row h-20 bg-red-100">
-
+                <div className="row h-14 pt-2 justify-end px-10">
+                    <button className="px-4 bg-blue-400 rounded-md text-white">
+                        Connect Wallet
+                    </button>
                 </div>
 
                 <div className="col w-full px-6 pt-4 gap-4 h-full">
