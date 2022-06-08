@@ -18,7 +18,7 @@ import { getAuthorityFromUserPubKey } from '../supabase/authority';
 import {Authority} from '../supabase/authority'
 
 interface props {
-    children: React.ReactNode
+    children: any
 }
 
 const PaymentProvider = (props: props) => {

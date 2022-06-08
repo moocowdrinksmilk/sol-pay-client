@@ -6,20 +6,15 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import PaymentProvider from '../context/PaymentProvider'
 import React, { useEffect } from 'react';
 import WalletWrapper from '../context/utils/WalletWrapper';
-import { getSession } from '../supabase/discord';
-import { initSupabaseClient } from '../supabase/client';
 import SupabaseWrapper from '../wrapper/SupabaseAuthWrapper'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const queryClient = new QueryClient()
-
   return (
     <SupabaseWrapper>
       <WalletWrapper>
         <PaymentProvider>
-          <QueryClientProvider client={queryClient}>
+          {/* // @ts-ignore */}
             <Component {...pageProps} />
-          </QueryClientProvider>
         </PaymentProvider>
       </WalletWrapper>
     </SupabaseWrapper>

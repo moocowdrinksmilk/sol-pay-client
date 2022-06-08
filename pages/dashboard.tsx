@@ -2,6 +2,7 @@ import GMVChart from "../components/homepage/charts/GMVChart"
 import SideBar from "../components/homepage/Sidebar"
 import { VscTriangleUp } from 'react-icons/vsc'
 import { AiOutlineEllipsis } from 'react-icons/ai'
+import LineChartItem from "../components/homepage/charts/LineChart"
 
 const Dashboard = () => {
     return (
@@ -50,24 +51,26 @@ const Dashboard = () => {
                             </div>
 
                             <div className="row h-1/3 gap-2">
-                                <div className="flex-1 rounded-md bg-white">
-
+                                <div className="w-1/2 h-full rounded-md bg-white">
+                                <LineChartItem />
                                 </div>
 
-                                <div className="flex-1 rounded-md bg-white">
-
+                                <div className="w-1/2 h-full rounded-md bg-white">
+                                <LineChartItem />
                                 </div>
                             </div>
 
                             <div className="row h-1/3 gap-2">
                                 <div className="flex-1 rounded-md bg-white">
-
+                                    <LineChartItem />
                                 </div>
 
                                 <div className="flex-1 rounded-md bg-white">
-
+                                    <LineChartItem />
                                 </div>
                             </div>
+
+
 
                         </div>
 

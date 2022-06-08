@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { getSupabaseClient, configureAuthSupabase, initSupabaseClient } from '../supabase/client'
 
 interface AuthProps {
-    children: React.ReactNode
+    children: any
 }
 
 const SupabaseWrapper = (AuthProps: AuthProps) => {
