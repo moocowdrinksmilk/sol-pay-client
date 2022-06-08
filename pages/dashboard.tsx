@@ -3,6 +3,7 @@ import SideBar from "../components/homepage/Sidebar"
 import { VscTriangleUp } from 'react-icons/vsc'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 import LineChartItem from "../components/homepage/charts/LineChart"
+import ChartContainer from '../components/homepage/charts/ChartContainer'
 
 const Dashboard = () => {
     return (
@@ -51,23 +52,23 @@ const Dashboard = () => {
                             </div>
 
                             <div className="row h-1/3 gap-2">
-                                <div className="w-1/2 h-full rounded-md bg-white">
-                                <LineChartItem />
-                                </div>
+                                <ChartContainer title="Gross Volume" value={-12.2} >
+                                    <LineChartItem />
+                                </ChartContainer>
 
-                                <div className="w-1/2 h-full rounded-md bg-white">
-                                <LineChartItem />
-                                </div>
+                                <ChartContainer title="Net Volume from Sales" value={1.1} >
+                                    <LineChartItem />
+                                </ChartContainer>
                             </div>
 
                             <div className="row h-1/3 gap-2">
-                                <div className="flex-1 rounded-md bg-white">
+                                <ChartContainer title="Traffic across platforms" value={12.64} >
                                     <LineChartItem />
-                                </div>
+                                </ChartContainer>
 
-                                <div className="flex-1 rounded-md bg-white">
+                                <ChartContainer title="Conversion rate" value={8.33} >
                                     <LineChartItem />
-                                </div>
+                                </ChartContainer>
                             </div>
 
 
