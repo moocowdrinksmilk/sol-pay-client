@@ -1,3 +1,5 @@
+import { PublicKey } from '@solana/web3.js'
+import { Authority } from './authority'
 import { getSupabaseClient } from './client'
 
 export type Product = {
@@ -11,17 +13,20 @@ export type Product = {
     billing_cycle: number
     shipping: number
     description: string
+    created_at: string
 }
 
-export const getProductSupa = async() => {
+export const getProductSupa = async(pubkey: PublicKey) => {
     try {
         const supabase = getSupabaseClient()
         const res = await supabase
         .from<Product>('product')
-        .select('id')
-        .match({
-            authority: '623L46fZw5tdnzzx8pqoWTnNVwQem1Zm315aYpc4wFFg'
-        })
+        .select(`
+            *,
+            authorities:id
+        `)
+        
+
         return res.data
     } catch(e) {
         console.log(e.message);

@@ -1,31 +1,44 @@
 import React from "react"
 import { AiOutlineEllipsis } from "react-icons/ai"
+import {DateTime} from 'luxon'
+import Image from 'next/image'
 
-const ProductItem = () => {
+interface props {
+    name: string
+    recurring: boolean
+    created: string
+}
+
+const ProductItem = (props: props) => {
     return (
-        <div className="py-10 px-6 bg-white row justify-between items-center border-b">
+        <div className="py-4 px-6 bg-white row justify-between items-center border-b">
             <div className="row items-center gap-4">
-                <div>
-                    IMAGE
+                <div className="h-20 w-20 relative">
+                    <Image src="/leather.webp" layout="fill" objectFit="contain" />
                 </div>
 
                 <div className="col gap-1">
                     <div>
-                        Hong Kong Dim Sum
+                        {props.name}
                     </div>
                     <div>
-                        Recurring
+                        {
+                            props.recurring ?
+                            "Recurring"
+                            :
+                            "One Time"
+                        }
                     </div>
                 </div>
             </div>
 
             <div className="row gap-8 items-center">
                 <div>
-                    02 June 2022
+                    {DateTime.fromISO(props.created).toFormat("dd LLLL yyyy")}
                 </div>
 
                 <div>
-                    02 June 2022
+                    {DateTime.fromISO(props.created).toFormat("dd LLLL yyyy")}
                 </div>
 
                 <AiOutlineEllipsis size={30} />

@@ -9,6 +9,7 @@ import { WalletModalProvider, WalletMultiButton } from "@solana/wallet-adapter-r
 import { addProductSupa, Product } from '../../supabase/product'
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import { getAuthorityFromUserPubKey } from "../../supabase/authority";
+import { useRouter } from 'next/router'
 
 export interface IFormInput {
     name: string
@@ -26,6 +27,7 @@ const Add = () => {
     const payment = usePayment()
     const wallet = useAnchorWallet()
     const [recurring, setRecurring] = useState(true)
+    const router = useRouter()
 
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         if (!wallet) {
@@ -36,19 +38,9 @@ const Add = () => {
             return
         }
 
-        const pubkey = await payment.addProduct(data.price)
-        const product = {
-            name: data.name,
-            id: pubkey.toBase58(),
-            category: data.category,
-            description: data.description,
-            pricing_model: data.pricingModel,
-            price: data.price,
-            billing_cycle: 2,
-            shipping: data.shipping
-        }
+        const pubkey = await payment.addProduct(data.price, authority)
 
-        await addProductSupa(
+         await addProductSupa(
             pubkey.toBase58(),
             authority?.id,
             data.name,
@@ -60,6 +52,7 @@ const Add = () => {
             data.shipping,
             data.description
         )
+        router.push("/product")
     };
 
 
@@ -117,25 +110,27 @@ const Add = () => {
                             <div className="row w-full gap-10">
                                 <button className={`flex-1 py-2 text-center border-2 ${recurring ? "border-blue-300" : "border-gray-300"} rounded-md`}
                                     type="button"
-                                    onClick={() => {setRecurring(true)}}
+                                    onClick={() => { setRecurring(true) }}
                                 >
                                     Recurring
                                 </button>
 
                                 <button className={`flex-1 py-4 text-center border-2 ${recurring ? "border-gray-300" : "border-blue-300"} rounded-md`}
                                     type="button"
-                                    onClick={() => {setRecurring(false)}}
+                                    onClick={() => { setRecurring(false) }}
                                 >
                                     One Time
                                 </button>
                             </div>
 
-                            <FormItem
-                                title="Billing Cycle"
-                                register={register("billingCycle", { required: true })}
-                                inputType="select"
-                                options={["Monthly", "Weekly", "Yearly"]}
-                            />
+
+                                <FormItem
+                                    title="Billing Cycle"
+                                    register={register("billingCycle", { required: false })}
+                                    inputType="select"
+                                    options={["Monthly", "Weekly", "Yearly"]}
+                                />
+                            
 
                             <FormItem
                                 title="Shipping Fee"
@@ -143,7 +138,7 @@ const Add = () => {
                                 register={register("shipping", { required: true })}
                             />
 
-                            <input type="submit" className="w-2/6 bg-blue-500 text-white py-2 rounded-md" value="Save & Add Product" />
+                            <input type="submit" className="w-2/6 bg-blue-500 text-white py-2 rounded-md cursor-pointer" value="Save & Add Product" />
                             <WalletModalProvider>
                                 <WalletMultiButton />
                             </WalletModalProvider>

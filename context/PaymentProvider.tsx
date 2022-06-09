@@ -26,33 +26,39 @@ const PaymentProvider = (props: props) => {
     const solWallet = useWallet()
     const [authority, setAuthority] = useState("")
 
-    const sendProductTransaction = async (key: web3.PublicKey, product: Product, productAccountKey: web3.PublicKey) => {
+    const sendProductTransaction = async (productAccountKey: web3.PublicKey) => {
         const provider = await getProvider(wallet)
         const program = await getProgram(provider as Provider)
-        const tokenAccount = await getAssociatedTokenAddress(NATIVE_MINT, wallet?.publicKey)
+        const tokenAccount = await getAssociatedTokenAddress(new web3.PublicKey("Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr"), wallet?.publicKey)
         
-        const addWrappedSol = new web3.Transaction().add(
-            web3.SystemProgram.transfer({
-                fromPubkey: key,
-                toPubkey: tokenAccount,
-                lamports: product.price.toNumber()
-            }),
-            createSyncNativeInstruction(
-                tokenAccount
-            )
-        )
-        addWrappedSol.feePayer = wallet.publicKey
-        let blockhashObj1 = await provider?.connection.getLatestBlockhash()
-        addWrappedSol.recentBlockhash = blockhashObj1?.blockhash
-        const signedTxws = await wallet.signTransaction(addWrappedSol)
-        const txIdws = await provider?.connection.sendRawTransaction(signedTxws.serialize())
-        await provider?.connection.confirmTransaction(txIdws as string)
+        // const addWrappedSol = new web3.Transaction().add(
+        //     web3.SystemProgram.transfer({
+        //         fromPubkey: key,
+        //         toPubkey: tokenAccount,
+        //         lamports: product.price.toNumber()
+        //     }),
+        //     createSyncNativeInstruction(
+        //         tokenAccount
+        //     )
+        // )
+        // addWrappedSol.feePayer = wallet.publicKey
+        // let blockhashObj1 = await provider?.connection.getLatestBlockhash()
+        // addWrappedSol.recentBlockhash = blockhashObj1?.blockhash
+        // const signedTxws = await wallet.signTransaction(addWrappedSol)
+        // const txIdws = await provider?.connection.sendRawTransaction(signedTxws.serialize())
+        // await provider?.connection.confirmTransaction(txIdws as string)
         const tokenAccountDetails = await getAccount(provider?.connection, tokenAccount, "confirmed")
         console.log(tokenAccountDetails);
         
         const balance = tokenAccountDetails.amount
+        console.log(balance.toString());
+        console.log(120 * 1000000);
+        
+        
+        
+        
 
-
+        const product = await getProductDetails(new web3.PublicKey("9Mshty3EG7ni2H8N5eLmFQpfFdYeqD48kxbitgFhdYxm"))
         const tx = program.transaction.transactProduct({
             accounts: {
                 signer: wallet?.publicKey,
@@ -107,7 +113,7 @@ const PaymentProvider = (props: props) => {
         }
     }
 
-    const addProduct = async (amount: number, authority: Authority) => {        
+    const addProduct = async (amount: number, authority: Authority) => {
         if (!wallet) {
             return
         }
@@ -117,11 +123,11 @@ const PaymentProvider = (props: props) => {
             const program = await getProgram(provider)
             const newProduct = web3.Keypair.generate()
 
-            const tokenAccount = await getTokenAccount(NATIVE_MINT)
+            const tokenAccount = await getTokenAccount(new web3.PublicKey("9Mshty3EG7ni2H8N5eLmFQpfFdYeqD48kxbitgFhdYxm"))
             console.log(tokenAccount, "returned token account");
 
             const tx = program.transaction.initProduct(
-                new BN(amount * LAMPORTS_PER_SOL), {
+                new BN(amount * 1000000), {
                 accounts: {
                     signer: wallet.publicKey,
                     product: newProduct.publicKey,
@@ -138,6 +144,8 @@ const PaymentProvider = (props: props) => {
             const signedTx = await wallet.signTransaction(tx)
             const txId = await provider?.connection.sendRawTransaction(signedTx.serialize())
             await provider?.connection.confirmTransaction(txId as string)
+            console.log(newProduct.publicKey);
+            
             return newProduct.publicKey
         } catch (e) {
             console.log(e);

@@ -15,6 +15,7 @@ export const getAuthorityFromUserPubKey = async (pubkey: string) => {
         .match({
             user: pubkey
         })
+        
         if (!res.body) {
             throw console.error("Supabase error");
         }
