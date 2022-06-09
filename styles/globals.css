@@ -12,6 +12,9 @@
   @apply flex flex-col
 }
 
+.no-scroll::-webkit-scrollbar {
+  display: none;
+}
 
 html,
 body {
@@ -30,6 +33,3 @@ a {
   box-sizing: border-box;
 }
 
-.recharts-wrapper {
-  position: absolute;
-}

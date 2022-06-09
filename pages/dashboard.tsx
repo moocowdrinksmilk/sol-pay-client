@@ -84,7 +84,7 @@ const Dashboard = () => {
 
                         <div className="col w-3/12 px-2 pb-10 gap-2">
                             <SmallChartContainer title="Earnings in June" value={40.8}>
-                                <PieChartItem />
+                                
                             </SmallChartContainer>
 
                             <div className="w-full h-1/3 bg-white rounded-md col p-4 gap-6">
@@ -100,15 +100,31 @@ const Dashboard = () => {
                                     </div>
                                 </div>
 
-                                <div className="col w-ful gap-6 overflow-auto">
+                                <div className="col w-ful gap-6 overflow-auto no-scroll">
                                     <InvoiceItem time={20} value={35} status={2} payer="Shopify" />
                                     <InvoiceItem time={100} value={1000} status={3} payer="Amazon" />
                                     <InvoiceItem time={20} value={70} status={1} payer="Personal Site A" />
                                 </div>
                             </div>
 
-                            <div className="w-full h-1/3 bg-white rounded-md">
+                            <div className="w-full h-1/3 bg-white rounded-md p-4">
+                                <div className="">
+                                    <h1>
+                                        Balances
+                                    </h1>
+                                </div>
 
+                                <div className="col w-full gap-10">
+                                    <div className="">
+                                        <div className="text-gray-500">USDC Balances</div>
+                                        <div>10,875  (843,171 INR)</div>
+                                    </div>
+
+                                    <div className="">
+                                        <div className="text-gray-500">Payouts (USDC)</div>
+                                        <div>4,875  (377,973 INR)</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

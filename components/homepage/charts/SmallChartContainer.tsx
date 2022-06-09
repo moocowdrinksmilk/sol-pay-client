@@ -29,7 +29,9 @@ const SmallChartContainer = (props: props) => {
                 </div>
             </div>
 
-            {props.children}
+            <div className="w-full h-full text-5xl text-left col justify-center items-start pl-4">
+                <div>400 USDC</div>
+            </div>
         </div>
     )
 }

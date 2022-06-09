@@ -2,6 +2,7 @@ import React from "react"
 import { AiOutlineEllipsis } from "react-icons/ai"
 import SideBar from "../../components/homepage/Sidebar"
 import ProductItem from "../../components/product/ProductItem"
+import Link from 'next/link'
 
 
 const Product = () => {
@@ -19,9 +20,11 @@ const Product = () => {
                             Products
                         </h1>
 
-                        <button className="bg-white rounded-md px-4">
-                            + Add Product
-                        </button>
+                        <Link href="/product/add">
+                            <button className="bg-white rounded-md px-4 hover:bg-gray-200">
+                                + Add Product
+                            </button>
+                        </Link>
                     </div>
 
                     <div className="row gap-20 text-md">

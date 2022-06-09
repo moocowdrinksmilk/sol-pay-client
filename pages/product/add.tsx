@@ -4,7 +4,7 @@ import { Image } from 'antd';
 import { FaChevronLeft } from 'react-icons/fa'
 import Link from 'next/link'
 import { usePayment } from "../../context/usePayment";
-import React from "react";
+import React, { useState } from "react";
 import { WalletModalProvider, WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { addProductSupa, Product } from '../../supabase/product'
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
@@ -20,10 +20,12 @@ export interface IFormInput {
     shipping: number
 }
 
+
 const Add = () => {
     const { register, handleSubmit } = useForm<IFormInput>();
     const payment = usePayment()
     const wallet = useAnchorWallet()
+    const [recurring, setRecurring] = useState(true)
 
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         if (!wallet) {
@@ -53,7 +55,7 @@ const Add = () => {
             data.category,
             data.pricingModel,
             data.price,
-            false,
+            recurring,
             2,
             data.shipping,
             data.description
@@ -113,11 +115,17 @@ const Add = () => {
                             />
 
                             <div className="row w-full gap-10">
-                                <button className="flex-1 py-2 text-center border-2 border-blue-300 rounded-md">
+                                <button className={`flex-1 py-2 text-center border-2 ${recurring ? "border-blue-300" : "border-gray-300"} rounded-md`}
+                                    type="button"
+                                    onClick={() => {setRecurring(true)}}
+                                >
                                     Recurring
                                 </button>
 
-                                <button className="flex-1 py-4 text-center border-2 border-gray-300 rounded-md">
+                                <button className={`flex-1 py-4 text-center border-2 ${recurring ? "border-gray-300" : "border-blue-300"} rounded-md`}
+                                    type="button"
+                                    onClick={() => {setRecurring(false)}}
+                                >
                                     One Time
                                 </button>
                             </div>
@@ -145,22 +153,29 @@ const Add = () => {
 
                             <div>
                                 <div className="grid grid-cols-2 gap-2">
-                                    <Image
-                                        width={200}
-                                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                                    />
-                                    <Image
-                                        width={200}
-                                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                                    />
-                                    <Image
-                                        width={200}
-                                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                                    />
-                                    <Image
-                                        width={200}
-                                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                                    />
+                                    <div className="border-gray-400 border w-44 h-44 col items-center justify-center text-3xl hover:bg-gray-200 cursor-pointer">
+                                        <div>
+                                            +
+                                        </div>
+                                    </div>
+
+                                    <div className="border-gray-400 border w-44 h-44 col items-center justify-center text-3xl hover:bg-gray-200 cursor-pointer">
+                                        <div>
+                                            +
+                                        </div>
+                                    </div>
+
+                                    <div className="border-gray-400 border w-44 h-44 col items-center justify-center text-3xl hover:bg-gray-200 cursor-pointer">
+                                        <div>
+                                            +
+                                        </div>
+                                    </div>
+
+                                    <div className="border-gray-400 border w-44 h-44 col items-center justify-center text-3xl hover:bg-gray-200 cursor-pointer">
+                                        <div>
+                                            +
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

@@ -11,19 +11,17 @@ const data01 = [
 
 const PieChartItem = () => {
     return (
-        <ResponsiveContainer width="100%" height="100%">
-            <PieChart width={400} height={400}>
+        <ResponsiveContainer width="99%" height="99%">
+            <PieChart>
                 <Pie
                     dataKey="value"
-                    isAnimationActive={false}
+                    isAnimationActive={true}
                     data={data01}
                     cx="50%"
-                    cy="50%"
-                    outerRadius={80}
+                    cy="70%"
+                    outerRadius={40}
                     fill="#8884d8"
-                    label
                 />
-                <Pie dataKey="value" data={data01} cx={500} cy={200} innerRadius={40} outerRadius={80} fill="#82ca9d" />
                 <Tooltip />
             </PieChart>
         </ResponsiveContainer>
